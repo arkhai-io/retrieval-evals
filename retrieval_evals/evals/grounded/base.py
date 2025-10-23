@@ -4,79 +4,52 @@ This module handles evaluations where gold standard answers are available.
 It compares generated answers against known correct answers.
 """
 
-import json
 from pathlib import Path
 
+from retrieval_evals.evals.grounded.metrics import ExactMatch, Metric
 from retrieval_evals.types import EvalResult, QAPairWithGold
 
-
-def load_data(json_path: Path | str) -> list[QAPairWithGold]:
-    """Load Q&A pairs with gold standard answers from JSON file.
-
-    Expected JSON format:
-    [
-        {
-            "question": "What is Python?",
-            "answer": "Python is a programming language.",
-            "gold_answer": "Python is a high-level programming language."
-        },
-        ...
-    ]
-
-    Args:
-        json_path: Path to JSON file containing Q&A pairs with gold answers
-
-    Returns:
-        List of Q&A pairs with gold standard answers
-
-    Raises:
-        FileNotFoundError: If the JSON file doesn't exist
-        ValueError: If file is not a JSON file or contains invalid JSON
-    """
-    # Convert to Path object for consistent handling
-    path = Path(json_path)
-
-    # Check if file exists
-    if not path.exists():
-        raise FileNotFoundError(f"JSON file not found: {path}")
-
-    # Check if it's a file (not a directory)
-    if not path.is_file():
-        raise ValueError(f"Path is not a file: {path}")
-
-    # Check file extension
-    if path.suffix.lower() != ".json":
-        raise ValueError(f"File must be a JSON file, got: {path.suffix}")
-
-    # Load and validate JSON syntax
-    try:
-        with open(path) as f:
-            data: list[QAPairWithGold] = json.load(f)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Invalid JSON format in {path}: {e}") from e
-
-    return data
+# Default metrics to run
+DEFAULT_METRICS: list[Metric] = [
+    ExactMatch(),
+]
 
 
-def evaluate_grounded(json_path: Path | str) -> list[EvalResult]:
+def evaluate_grounded(
+    data: Path | str | list[QAPairWithGold],
+    metrics: list[Metric] | None = None,
+) -> list[EvalResult]:
     """Run grounded evaluation with gold standard answers.
 
     Args:
-        json_path: Path to JSON file containing Q&A pairs with gold answers
+        data: Path to JSON file OR list of Q&A pairs with gold answers
+        metrics: List of metric instances to run. If None, runs default metrics.
 
     Returns:
         List of evaluation results with scores
-    """
-    qa_pairs = load_data(json_path)
 
-    # TODO: Implement actual evaluation logic
-    # For now, just return placeholder results
-    results: list[EvalResult] = [
-        {
-            "metric_name": "placeholder",
-            "score": 0.0,
-            "metadata": {"num_pairs": len(qa_pairs)},
-        }
-    ]
+    Examples:
+        # Run with default metrics
+        results = evaluate_grounded("data.json")
+
+        # Run with custom metrics
+        from retrieval_evals.evals.grounded.metrics import ExactMatch
+
+        results = evaluate_grounded(
+            "data.json",
+            metrics=[ExactMatch(case_sensitive=True)]
+        )
+
+        # Pass data directly
+        qa_pairs = [{"question": "...", "answer": "...", "gold_answer": "..."}]
+        results = evaluate_grounded(qa_pairs)
+    """
+    # Use default metrics if none specified
+    metrics_to_run = metrics if metrics is not None else DEFAULT_METRICS
+
+    # Run all metrics and collect results
+    results: list[EvalResult] = []
+    for metric in metrics_to_run:
+        results.extend(metric.evaluate(data))
 
     return results

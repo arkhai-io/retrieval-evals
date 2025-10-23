@@ -21,4 +21,5 @@ class EvalResult(TypedDict):
 
     metric_name: str
     score: float
+    individual_scores: list[float]
     metadata: dict[str, Any]
