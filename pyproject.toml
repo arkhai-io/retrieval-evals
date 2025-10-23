@@ -8,6 +8,7 @@ packages = [{include = "retrieval_evals"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+sentence-transformers = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"

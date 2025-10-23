@@ -2,5 +2,6 @@
 
 from retrieval_evals.evals.grounded.metrics.base import Metric
 from retrieval_evals.evals.grounded.metrics.exact_match import ExactMatch
+from retrieval_evals.evals.grounded.metrics.semantic_similarity import SemanticSimilarity
 
-__all__ = ["Metric", "ExactMatch"]
+__all__ = ["Metric", "ExactMatch", "SemanticSimilarity"]
