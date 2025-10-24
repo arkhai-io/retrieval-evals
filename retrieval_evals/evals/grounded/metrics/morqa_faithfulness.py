@@ -48,7 +48,7 @@ class MORQAFaithfulness(Metric):
             model: Model identifier on OpenRouter
             base_url: OpenRouter API base URL
         """
-        super().__init__(api_key=api_key, model=model, base_url=base_url)
+        super().__init__(model=model)
         self.api_key = api_key
         self.model = model
         self.base_url = base_url
