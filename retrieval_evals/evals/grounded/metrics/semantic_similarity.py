@@ -1,6 +1,6 @@
 """Semantic similarity metric using sentence transformers."""
 
-from sentence_transformers import CrossEncoder, SentenceTransformer  # type: ignore
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from retrieval_evals.evals.grounded.metrics.base import Metric
 from retrieval_evals.types import EvalResult, QAPairWithGold
@@ -26,7 +26,7 @@ class SemanticSimilarity(Metric):
 
         self.model_name = model_name
         self.model_type = model_type
-        self.model = (
+        self.model: SentenceTransformer | CrossEncoder = (
             SentenceTransformer(model_name)
             if model_type == "bi-encoder"
             else CrossEncoder(model_name)
@@ -57,7 +57,7 @@ class SemanticSimilarity(Metric):
             ]
 
         individual_scores = []
-        if self.model_type == "bi-encoder":
+        if self.model_type == "bi-encoder" and isinstance(self.model, SentenceTransformer):
             # Bi-encoder: compute embeddings and cosine similarity
             answers = [p["answer"] for p in qa_pairs]
             gold_answers = [p["gold_answer"] for p in qa_pairs]
@@ -67,11 +67,13 @@ class SemanticSimilarity(Metric):
 
             similarities = self.model.similarity(answer_embeddings, gold_embeddings)
             individual_scores = [float(similarities[i][i]) for i in range(len(qa_pairs))]
-        else:
+        elif isinstance(self.model, CrossEncoder):
             # Cross-encoder: score pairs directly
             pairs = [(p["answer"], p["gold_answer"]) for p in qa_pairs]
             scores = self.model.predict(pairs)
-            individual_scores = [float(s) for s in scores]
+            individual_scores = [
+                float(s.item()) if hasattr(s, "item") else float(s) for s in scores
+            ]
 
         avg_score = sum(individual_scores) / len(individual_scores)
 
