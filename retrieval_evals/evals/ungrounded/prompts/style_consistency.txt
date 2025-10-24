@@ -1,0 +1,78 @@
+You are an expert evaluator assessing whether a new answer matches the style of reference examples.
+
+Below are REFERENCE EXAMPLES showing the typical style, tone, and format of answers:
+
+{reference_examples}
+
+---
+
+Now evaluate this NEW Q&A PAIR against the reference style:
+
+**QUESTION:**
+{question}
+
+**ANSWER:**
+{answer}
+
+---
+
+**EVALUATION TASK:**
+Compare the new answer to the reference examples and evaluate consistency across five dimensions using a 5-point Likert scale:
+
+1. **TONE & FORMALITY CONSISTENCY** (1-5)
+   - Does it match the level of formality (casual vs professional)?
+   - Similar warmth/friendliness?
+   - Consistent use of pronouns (I/we/you)?
+   - Same level of empathy/engagement?
+
+   Score: 5=Perfect match, 4=Very similar, 3=Somewhat similar, 2=Noticeably different, 1=Completely different
+
+2. **STRUCTURE & FORMAT SIMILARITY** (1-5)
+   - Similar answer organization?
+   - Consistent use of lists, paragraphs, or sections?
+   - Same level of detail/elaboration?
+   - Similar opening/closing patterns?
+
+   Score: 5=Perfect match, 4=Very similar, 3=Somewhat similar, 2=Noticeably different, 1=Completely different
+
+3. **LENGTH & VERBOSITY ALIGNMENT** (1-5)
+   - Comparable answer length?
+   - Similar level of conciseness vs elaboration?
+   - Consistent sentence length patterns?
+
+   Score: 5=Perfect match, 4=Very similar, 3=Somewhat similar, 2=Noticeably different, 1=Completely different
+
+4. **VOCABULARY & COMPLEXITY LEVEL** (1-5)
+   - Similar vocabulary sophistication?
+   - Consistent use of technical vs layman terms?
+   - Same reading level/complexity?
+   - Similar use of examples or analogies?
+
+   Score: 5=Perfect match, 4=Very similar, 3=Somewhat similar, 2=Noticeably different, 1=Completely different
+
+5. **RESPONSE PATTERN MATCHING** (1-5)
+   - Similar approach to answering questions?
+   - Consistent use of disclaimers/caveats?
+   - Same level of certainty vs uncertainty?
+   - Similar direct vs indirect answering style?
+
+   Score: 5=Perfect match, 4=Very similar, 3=Somewhat similar, 2=Noticeably different, 1=Completely different
+
+---
+
+**INSTRUCTIONS:**
+- Compare the new answer holistically to ALL reference examples
+- Look for overall style patterns, not word-for-word matching
+- Consider what makes the reference style distinctive
+- Be objective and consistent in scoring
+
+**OUTPUT FORMAT:**
+Return ONLY a JSON object with your scores (no explanation):
+
+{{
+  "tone_and_formality": <score 1-5>,
+  "structure_and_format": <score 1-5>,
+  "length_and_verbosity": <score 1-5>,
+  "vocabulary_and_complexity": <score 1-5>,
+  "response_pattern": <score 1-5>
+}}
