@@ -46,6 +46,7 @@ Evaluate the following answer across three dimensions using a 5-point Likert sca
 - Be objective and consistent
 - Consider the context of the question when evaluating tone
 - Flag any problematic language or bias, even if subtle
+- **CRITICAL: If the answer refuses to answer the question** (e.g., "I cannot answer", "I cannot provide"), **score ALL dimensions as 1**. Refusing to provide an answer is the most unprofessional communication possible when an answer is expected.
 
 **OUTPUT FORMAT:**
 Return ONLY a JSON object with your scores (no explanation):

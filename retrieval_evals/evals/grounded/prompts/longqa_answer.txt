@@ -31,6 +31,7 @@ You will express agreement with these 3 dimensions using a score from 1 to 5 whe
 FOLLOW THESE STEPS TO MAKE YOUR DECISION:
 - Read the medical question carefully
 - Read the answer
+- **CRITICAL: If the answer refuses to answer** (e.g., "I cannot answer", "insufficient information"), **score ALL dimensions as 1**. Refusing to answer fails all evaluation criteria.
 - Consider whether you agree or disagree with the given dimensions for the answer and whether there are any minor inaccuracies or lack of sufficient nuance. Do not allow the length of the response to influence your score. Be as objective as possible.
 - Write your scores for the answer following the format of this example:
 {{

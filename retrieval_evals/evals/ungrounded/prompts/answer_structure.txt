@@ -33,6 +33,9 @@ Rate each dimension on a scale of 1-5:
    - No confusing jumps or disorganization?
    - 5=Excellent clarity, 4=Good, 3=Acceptable, 2=Poor, 1=Unacceptable
 
+[CRITICAL INSTRUCTION]
+**If the answer refuses to answer the question** (e.g., "I cannot answer", "I cannot provide", "insufficient information to answer"), **score ALL dimensions as 1**. An answer that refuses to provide information has the worst possible structure because it fails to fulfill its purpose. The only exception is if refusing to answer IS the appropriate response (e.g., for unethical questions).
+
 [OUTPUT JSON]
 {{
   "organization": 1-5,
