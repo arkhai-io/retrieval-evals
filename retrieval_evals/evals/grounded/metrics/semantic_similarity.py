@@ -57,7 +57,7 @@ class SemanticSimilarity(Metric):
             ]
 
         individual_scores = []
-        if self.model_type == "bi-encoder" and isinstance(self.model, SentenceTransformer):
+        if self.model_type == "bi-encoder":
             # Bi-encoder: compute embeddings and cosine similarity
             answers = [p["answer"] for p in qa_pairs]
             gold_answers = [p["gold_answer"] for p in qa_pairs]
@@ -67,7 +67,7 @@ class SemanticSimilarity(Metric):
 
             similarities = self.model.similarity(answer_embeddings, gold_embeddings)
             individual_scores = [float(similarities[i][i]) for i in range(len(qa_pairs))]
-        elif isinstance(self.model, CrossEncoder):
+        else:  # cross-encoder
             # Cross-encoder: score pairs directly
             pairs = [(p["answer"], p["gold_answer"]) for p in qa_pairs]
             scores = self.model.predict(pairs)
