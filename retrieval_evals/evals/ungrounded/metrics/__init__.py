@@ -7,6 +7,11 @@ from retrieval_evals.evals.ungrounded.metrics.coherence import Coherence
 from retrieval_evals.evals.ungrounded.metrics.communication_quality import (
     CommunicationQuality,
 )
+from retrieval_evals.evals.ungrounded.metrics.style_consistency import (
+    StyleConsistency,
+)
+
+__all__ = ["Metric", "AnswerLength", "CommunicationQuality", "StyleConsistency"]
 from retrieval_evals.evals.ungrounded.metrics.readability import Readability
 
 __all__ = [
