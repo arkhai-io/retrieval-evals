@@ -12,6 +12,9 @@ sentence-transformers = "^3.0.0"
 requests = "^2.32.0"
 nltk = "^3.9.0"
 rouge-score = "^0.1.2"
+scipy = "^1.13.0"
+numpy = "^1.26.0"
+dotenv = "^0.9.9"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
@@ -60,6 +63,8 @@ module = [
     "nltk.*",
     "rouge_score.*",
     "sentence_transformers.*",
+    "scipy.*",
+    "numpy.*",
 ]
 ignore_missing_imports = true
 

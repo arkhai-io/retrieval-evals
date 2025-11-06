@@ -1,8 +1,10 @@
 """Metrics for grounded evaluations."""
 
+from retrieval_evals.evals.grounded.metrics.answer_quality import AnswerQuality
 from retrieval_evals.evals.grounded.metrics.base import Metric
 from retrieval_evals.evals.grounded.metrics.bleu import BLEU
 from retrieval_evals.evals.grounded.metrics.exact_match import ExactMatch
+from retrieval_evals.evals.grounded.metrics.fact_matching import FactMatching
 from retrieval_evals.evals.grounded.metrics.longqa_answer import LongQAAnswer
 from retrieval_evals.evals.grounded.metrics.meteor import METEOR
 from retrieval_evals.evals.grounded.metrics.morqa_faithfulness import MORQAFaithfulness
@@ -15,6 +17,8 @@ __all__ = [
     "SemanticSimilarity",
     "LongQAAnswer",
     "MORQAFaithfulness",
+    "FactMatching",
+    "AnswerQuality",
     "BLEU",
     "ROUGE",
     "METEOR",

@@ -1,6 +1,27 @@
-# retrieval-evals
+<div align="center">
+  <img src="assets/logo.jpg" alt="Retrieval Evals Logo" width="200"/>
 
-Evaluation framework for question-answering systems.
+  # Retrieval Evals
+
+  Evaluation framework for question-answering systems
+
+  ![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)
+  ![License MIT](https://img.shields.io/badge/license-MIT-green.svg)
+</div>
+
+---
+
+## Overview
+
+Retrieval Evals is a comprehensive evaluation framework for assessing question-answering systems. It supports both grounded evaluations (with gold standard answers) and ungrounded evaluations (without reference answers), providing flexible metric configurations and extensible architecture.
+
+## Key Features
+
+- **Grounded Evaluations**: Compare generated answers against gold standard references using metrics like ExactMatch, SemanticSimilarity, BLEU, ROUGE, and METEOR
+- **Ungrounded Evaluations**: Assess answers without references using AnswerLength, Coherence, Readability, and Communication Quality
+- **Extensible Architecture**: Easy-to-implement custom metrics with standardized interfaces
+- **LLM-based Metrics**: Advanced evaluation using language models for faithfulness, answer quality, and structure analysis
+- **Comprehensive Output**: Detailed scoring with individual and aggregate results plus metadata
 
 ## Installation
 
@@ -8,19 +29,13 @@ Evaluation framework for question-answering systems.
 poetry install
 ```
 
-## Usage
+## Quick Start
 
-### Grounded Evaluations
-
-Compare generated answers against gold standard answers.
+### Grounded Evaluation
 
 ```python
 from retrieval_evals.evals import evaluate_grounded
 
-# From file
-results = evaluate_grounded("data.json")
-
-# From data
 qa_pairs = [
     {
         "question": "What is Python?",
@@ -28,24 +43,14 @@ qa_pairs = [
         "gold_answer": "A high-level programming language"
     }
 ]
+
 results = evaluate_grounded(qa_pairs)
-
-# Custom metric configuration
-from retrieval_evals.evals.grounded.metrics import ExactMatch
-
-results = evaluate_grounded(
-    qa_pairs,
-    metrics=[ExactMatch(case_sensitive=True)]
-)
 ```
 
-### Ungrounded Evaluations
-
-Evaluate without gold standard answers.
+### Ungrounded Evaluation
 
 ```python
 from retrieval_evals.evals import evaluate_ungrounded
-from retrieval_evals.evals.ungrounded.metrics import AnswerLength
 
 qa_pairs = [
     {
@@ -54,11 +59,42 @@ qa_pairs = [
     }
 ]
 
-results = evaluate_ungrounded(
+results = evaluate_ungrounded(qa_pairs)
+```
+
+### Custom Metric Configuration
+
+```python
+from retrieval_evals.evals.grounded.metrics import ExactMatch, SemanticSimilarity
+
+results = evaluate_grounded(
     qa_pairs,
-    metrics=[AnswerLength(unit="words")]
+    metrics=[
+        ExactMatch(case_sensitive=True),
+        SemanticSimilarity(model_name="all-MiniLM-L6-v2")
+    ]
 )
 ```
+
+## Available Metrics
+
+### Grounded Metrics
+- **ExactMatch**: Binary match between answer and gold standard
+- **SemanticSimilarity**: Cosine similarity using sentence embeddings
+- **BLEU**: Precision-based n-gram overlap
+- **ROUGE**: Recall-based n-gram overlap
+- **METEOR**: Alignment-based matching with synonyms
+- **FactMatching**: LLM-based fact extraction and comparison
+- **AnswerQuality**: LLM-based quality assessment
+- **LongQAAnswer**: Specialized evaluation for long-form answers
+- **MORQAFaithfulness**: Context-based faithfulness evaluation
+
+### Ungrounded Metrics
+- **AnswerLength**: Token or word count analysis
+- **Coherence**: LLM-based coherence scoring
+- **Readability**: Flesch Reading Ease and Grade Level
+- **CommunicationQuality**: LLM-based communication assessment
+- **AnswerStructure**: Format and organization evaluation
 
 ## Output Schema
 
@@ -77,34 +113,25 @@ results = evaluate_ungrounded(
 ]
 ```
 
-## Available Metrics
+## Creating Custom Metrics
 
-**Grounded:**
-- `ExactMatch(case_sensitive=False, normalize_whitespace=True)`
-
-**Ungrounded:**
-- `AnswerLength(unit="words")`
-
-## Adding Metrics
-
-Create a new metric class in the appropriate directory:
+Implement the `Metric` base class in the appropriate directory:
 
 ```python
-# retrieval_evals/evals/grounded/metrics/my_metric.py
 from retrieval_evals.evals.grounded.metrics.base import Metric
 from retrieval_evals.types import EvalResult, QAPairWithGold
 
-class MyMetric(Metric):
+class CustomMetric(Metric):
     def __init__(self, param: str = "default"):
         super().__init__(param=param)
         self.param = param
 
     @property
     def name(self) -> str:
-        return "my_metric"
+        return "custom_metric"
 
     def compute(self, qa_pairs: list[QAPairWithGold]) -> list[EvalResult]:
-        individual_scores = [1.0 for _ in qa_pairs]  # Your logic here
+        individual_scores = [self._score(pair) for pair in qa_pairs]
 
         return [{
             "metric_name": self.name,
@@ -112,11 +139,20 @@ class MyMetric(Metric):
             "individual_scores": individual_scores,
             "metadata": {"num_pairs": len(qa_pairs), "config": self.config}
         }]
+
+    def _score(self, pair: QAPairWithGold) -> float:
+        # Custom scoring logic
+        return 1.0
 ```
 
-Register in `__init__.py` and add to `DEFAULT_METRICS` in `base.py`.
+Register the metric in `__init__.py` and add to `DEFAULT_METRICS` in `base.py`.
 
 ## Development
+
+**Install dependencies:**
+```bash
+poetry install
+```
 
 **Install pre-commit hooks:**
 ```bash
@@ -135,22 +171,24 @@ poetry run ruff check --fix .
 poetry run mypy retrieval_evals
 ```
 
-## Structure
+## Project Structure
 
 ```
 retrieval_evals/
-├── types/
-│   └── __init__.py          # QAPair, QAPairWithGold, EvalResult
+├── types/                      # Type definitions
+│   └── __init__.py
 ├── evals/
 │   ├── grounded/
-│   │   ├── base.py          # evaluate_grounded()
-│   │   └── metrics/
-│   │       ├── base.py      # Metric base class
-│   │       └── exact_match.py
+│   │   ├── base.py            # evaluate_grounded()
+│   │   ├── metrics/           # Grounded metrics
+│   │   └── prompts/           # LLM prompts
 │   └── ungrounded/
-│       ├── base.py          # evaluate_ungrounded()
-│       └── metrics/
-│           ├── base.py      # Metric base class
-│           └── answer_length.py
-└── ...
+│       ├── base.py            # evaluate_ungrounded()
+│       ├── metrics/           # Ungrounded metrics
+│       └── prompts/           # LLM prompts
+└── py.typed
 ```
+
+## License
+
+MIT
