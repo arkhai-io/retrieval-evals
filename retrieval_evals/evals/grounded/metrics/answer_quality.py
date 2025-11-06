@@ -199,9 +199,9 @@ class AnswerQuality(Metric):
         for pair in qa_pairs:
             try:
                 result = self._evaluate_answer(
-                    question=pair["question"],
-                    model_answer=pair["answer"],
-                    gold_answer=pair["gold_answer"],
+                    pair["question"],
+                    pair["answer"],
+                    pair["gold_answer"],
                 )
 
                 individual_scores.append(
