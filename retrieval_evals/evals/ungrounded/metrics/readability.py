@@ -19,8 +19,9 @@ Lower grade levels and higher reading ease indicate more accessible text.
 import re
 from statistics import mean
 
-from retrieval_evals.evals.ungrounded.metrics.base import Metric
 from retrieval_evals.types import EvalResult, QAPair
+
+from .base import Metric
 
 
 class Readability(Metric):

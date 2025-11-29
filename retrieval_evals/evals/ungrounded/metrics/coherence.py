@@ -33,8 +33,9 @@ from typing import Any
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-from retrieval_evals.evals.ungrounded.metrics.base import Metric
 from retrieval_evals.types import EvalResult, QAPair
+
+from .base import Metric
 
 
 class Coherence(Metric):

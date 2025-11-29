@@ -19,8 +19,9 @@ from typing import Any
 
 import requests
 
-from retrieval_evals.evals.ungrounded.metrics.base import Metric
 from retrieval_evals.types import EvalResult, QAPair
+
+from .base import Metric
 
 
 class AnswerStructure(Metric):
